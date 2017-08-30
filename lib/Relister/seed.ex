@@ -1,10 +1,10 @@
 defmodule Relister.Seed do
+    require Logger
     def seed do
         HTTPoison.start
         HTTPoison.get("https://esi.tech.ccp.is/latest/universe/regions/?datasource=tranquility")
         |> handle_response
         |> elem(1)
-        |> Logger.info                
         |> Enum.map(&Task.async(fn -> fetch_region(&1)end))
         |> Enum.map(&Task.await(&1, 30000))
         
@@ -19,7 +19,7 @@ defmodule Relister.Seed do
         |> HTTPoison.get
         |> handle_response 
         |> elem(1)                
-        |> get_constellations
+       # |> get_constellations
         |> IO.inspect
     end
 
